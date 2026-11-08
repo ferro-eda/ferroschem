@@ -10,7 +10,7 @@
     clippy::unreachable
 )]
 
-use schemcraft_core::Schematic;
+use ferroschem_core::Schematic;
 
 #[derive(Debug, thiserror::Error)]
 pub enum FormatError {

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-use schemcraft_engine::Session;
+use ferroschem_engine::Session;
 use serde_json::Value;
 
 fn main() {

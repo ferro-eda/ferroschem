@@ -46,7 +46,7 @@ pub const DEFAULT_PIN_SIZE: Point = Point::new(5.0, 5.0);
 
 /// A first-class electrical pin on a [`Symbol`].
 ///
-/// In SchemCraft's canonical model, a pin is a dedicated domain object with a
+/// In FerroSchem's canonical model, a pin is a dedicated domain object with a
 /// connection point (`pos`), direction (`dir`), and name—not a rectangle hidden
 /// on a magic layer number.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -154,7 +154,7 @@ pub struct Schematic {
     pub xschem_headers: Option<XschemHeaders>,
 }
 
-/// A top-level SchemCraft document: either a [`Schematic`] or a [`Symbol`].
+/// A top-level FerroSchem document: either a [`Schematic`] or a [`Symbol`].
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum Document {
     Schematic(Schematic),

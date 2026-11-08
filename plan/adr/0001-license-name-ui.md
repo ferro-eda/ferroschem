@@ -1,6 +1,6 @@
 # ADR 0001 — License, name, UI stack
 
-- **Name:** SchemCraft (crates `schemcraft-*`). Independent of xschem.
+- **Name:** FerroSchem (crates `ferroschem-*`; originally SchemCraft, updated in ADR 0003). Independent of xschem.
 - **License:** GPL-3.0-or-later. xschem sources are GPL-2.0-or-later, so porting is permitted;
   Apache/MIT dependencies are compatible with GPL-3.0. Two xschem files are GPL-3 (compatible).
 - **Not clean-room** with respect to xschem; attribution recorded in `ATTRIBUTION.md`.

@@ -1,6 +1,6 @@
-# 3. Algebraic Data Types (`enum`), Composition, and `BTreeMap` in `schemcraft-core`
+# 3. Algebraic Data Types (`enum`), Composition, and `BTreeMap` in `ferroschem-core`
 
-In **M1 — Teaching Phase 1** (and [ADR 0002](../../plan/adr/0002-canonical-core-and-format-codecs.md)), we designed SchemCraft's canonical domain model across four focused modules in [`crates/core/src/`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/lib.rs):
+In **M1 — Teaching Phase 1** (and [ADR 0002](../../plan/adr/0002-canonical-core-and-format-codecs.md), [ADR 0003](../../plan/adr/0003-rename-to-ferroschem.md)), we designed FerroSchem's canonical domain model across four focused modules in [`crates/core/src/`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/lib.rs):
 - [`geometry.rs`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/geometry.rs) (`Point`, `Rotation`)
 - [`props.rs`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/props.rs) (`Properties`, `XschemHeaders`)
 - [`graphics.rs`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/graphics.rs) (`LayerRole`, `Graphics`, `Line`, `Rect`, `Arc`, `Polygon`, `Text`)
@@ -25,7 +25,7 @@ pub enum Rotation {
 }
 ```
 
-**But in Rust, each variant of an `enum` can also carry its own data of any type!** Computer scientists call this an **Algebraic Data Type (ADT)** or **Tagged Union**. We use this in three places in `schemcraft-core`:
+**But in Rust, each variant of an `enum` can also carry its own data of any type!** Computer scientists call this an **Algebraic Data Type (ADT)** or **Tagged Union**. We use this in three places in `ferroschem-core`:
 
 ### A. [`LayerRole`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/graphics.rs#L14-L34) — Semantic Cases + a Parameterized Escape Hatch
 ```rust

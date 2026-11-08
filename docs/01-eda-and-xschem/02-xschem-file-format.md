@@ -1,15 +1,15 @@
-# 2. The Xschem File Format vs. SchemCraft's Canonical Model
+# 2. The Xschem File Format vs. FerroSchem's Canonical Model
 
-One of the key architectural decisions in SchemCraft ([ADR 0002](../../plan/adr/0002-canonical-core-and-format-codecs.md)) is separating **SchemCraft's Canonical Domain Model** (`crates/core`) from **File Format Codecs** (`crates/format`):
+One of the key architectural decisions in FerroSchem ([ADR 0002](../../plan/adr/0002-canonical-core-and-format-codecs.md), [ADR 0003](../../plan/adr/0003-rename-to-ferroschem.md)) is separating **FerroSchem's Canonical Domain Model** (`crates/core`) from **File Format Codecs** (`crates/format`):
 
 ```mermaid
 flowchart LR
-    Xschem["Xschem .sch / .sym<br/>(format::xschem)"] <--> Core["SchemCraft Canonical Model<br/>(crates/core: Symbol, Schematic, Pin, LayerRole)"]
-    Native["SchemCraft Native .scsch / .scsym<br/>(format::native S-expressions)"] <--> Core
+    Xschem["Xschem .sch / .sym<br/>(format::xschem)"] <--> Core["FerroSchem Canonical Model<br/>(crates/core: Symbol, Schematic, Pin, LayerRole)"]
+    Native["FerroSchem Native .fsch / .fsym<br/>(format::native S-expressions)"] <--> Core
     Future["Future Formats<br/>(KiCad, LTspice, EDIF)"] <--> Core
 ```
 
-Let's first dissect how xschem's ASCII `.sch` and `.sym` files work on disk, and then see how our `format::xschem` codec translates them into `schemcraft-core`—and how they compare to SchemCraft's native S-expression format.
+Let's first dissect how xschem's ASCII `.sch` and `.sym` files work on disk, and then see how our `format::xschem` codec translates them into `ferroschem-core`—and how they compare to FerroSchem's native S-expression format.
 
 ---
 
@@ -17,7 +17,7 @@ Let's first dissect how xschem's ASCII `.sch` and `.sym` files work on disk, and
 
 An xschem `.sch` or `.sym` file is a sequence of plain-text records. Each record begins with a single ASCII character tag, followed by numbers and/or `{...}` braced strings:
 
-| Xschem Tag | Meaning in Xschem | How `schemcraft-core` Models It |
+| Xschem Tag | Meaning in Xschem | How `ferroschem-core` Models It |
 |---|---|---|
 | `v`, `G`, `K`, `V`, `S`, `F`, `E` | Version & global property blocks (VHDL, Symbol, Verilog, SPICE, Spectre, tEDAx) | `Symbol::props` / `Schematic::props` + [`XschemHeaders`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/props.rs#L39-L56) passthrough |
 | `L` | **Line** segment on an integer layer (`0..N`) | [`Line`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/graphics.rs#L37-L43) with semantic [`LayerRole`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/graphics.rs#L14-L34) |
@@ -60,7 +60,7 @@ T {@name} 15 -18.75 0 0 0.2 0.2 {}
 T {@value} 15 -6.25 0 0 0.2 0.2 {}
 ```
 
-Look closely at how xschem encodes things vs. how `schemcraft-core` cleans them up:
+Look closely at how xschem encodes things vs. how `ferroschem-core` cleans them up:
 
 1. **Pins (`B 5 ...` → [`Pin`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/document.rs#L48-L60)):**
    - In xschem, there is no `PIN` tag—a pin is a `B` (Box) on magic layer `5` (`B 5 -2.5 -32.5 2.5 -27.5 {name=P dir=inout ...}`).
@@ -68,7 +68,7 @@ Look closely at how xschem encodes things vs. how `schemcraft-core` cleans them 
    - When saving back to `.sym`, [`Pin::bounds()`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/document.rs#L74-L82) reconstructs the exact `-2.5 -32.5 2.5 -27.5` box coordinates!
 2. **Layers (`4`, `13`, `15`, `17` → [`LayerRole`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/graphics.rs#L14-L34)):**
    - Xschem uses integer color indices (`4` = symbol body, `13` = pin numbers, `15` = net names, `17` = simulation annotations).
-   - `schemcraft-core` maps these to semantic variants (`LayerRole::SymbolBody`, `LayerRole::PinAnnotation`, etc.), while any custom layer number maps to `LayerRole::Custom(n)` so nothing is ever lost.
+   - `ferroschem-core` maps these to semantic variants (`LayerRole::SymbolBody`, `LayerRole::PinAnnotation`, etc.), while any custom layer number maps to `LayerRole::Custom(n)` so nothing is ever lost.
 
 ---
 
@@ -98,12 +98,12 @@ In xschem's `save.c` (`load_ascii_string` and `save_ascii_string`):
 
 ---
 
-## 5. Preview: SchemCraft's Native S-Expression Format (`.scsch` / `.scsym`)
+## 5. Preview: FerroSchem's Native S-Expression Format (`.fsch` / `.fsym`)
 
-Alongside 100% compatibility with xschem `.sch`/`.sym` files, SchemCraft also defines its own native S-expression format (`format::native`), inspired by modern KiCad:
+Alongside 100% compatibility with xschem `.sch`/`.sym` files, FerroSchem also defines its own native S-expression format (`format::native`), inspired by modern KiCad:
 
 ```lisp
-(schemcraft_sym (version 1)
+(ferroschem_sym (version 1)
   (prop "type" "resistor")
   (prop "format" "@name @pinlist @value m=@m")
   (pin "P" (dir inout) (at 0 -30) (size 5 5) (prop "pinnumber" "1"))
@@ -112,4 +112,4 @@ Alongside 100% compatibility with xschem `.sch`/`.sym` files, SchemCraft also de
 )
 ```
 - **One line per pin, wire, or shape** → clean `git diff`s with zero trailing-comma conflicts.
-- **Self-describing `(key value)` fields** → forward-compatible as SchemCraft evolves.
+- **Self-describing `(key value)` fields** → forward-compatible as FerroSchem evolves.

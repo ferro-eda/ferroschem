@@ -12,7 +12,7 @@
     clippy::unreachable
 )]
 
-use schemcraft_core::Schematic;
+use ferroschem_core::Schematic;
 use serde_json::Value;
 
 #[derive(Debug, thiserror::Error)]

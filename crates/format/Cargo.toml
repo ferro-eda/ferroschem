@@ -1,5 +1,5 @@
 [package]
-name = "schemcraft-format"
+name = "ferroschem-format"
 description = "Reader and writer for xschem-compatible .sch / .sym files"
 version.workspace = true
 edition.workspace = true
@@ -7,7 +7,7 @@ license.workspace = true
 rust-version.workspace = true
 
 [dependencies]
-schemcraft-core.workspace = true
+ferroschem-core.workspace = true
 thiserror.workspace = true
 
 [lints]

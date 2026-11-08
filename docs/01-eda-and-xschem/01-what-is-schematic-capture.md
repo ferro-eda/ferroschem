@@ -2,7 +2,7 @@
 
 When you look at an electronic circuit diagram on a screen, your eyes see **lines, boxes, and labels**. When a circuit simulator like **ngspice** runs a simulation, it needs **which component pins share an electrical node**.
 
-A **schematic capture and netlisting tool** (like xschem, and now **SchemCraft**) bridges those two worlds:
+A **schematic capture and netlisting tool** (like xschem, and now **FerroSchem**) bridges those two worlds:
 1. **Schematic Capture:** A 2D CAD editor for drawing circuit diagrams cleanly.
 2. **Netlisting:** An algorithm that reads the 2D drawing, figures out what is electrically connected, and outputs a text file (a **netlist**, such as SPICE, Verilog, or VHDL) that simulators and chip layout tools understand.
 
@@ -59,7 +59,7 @@ Once your schematic is drawn, the **netlister** walks the schematic:
 
 ---
 
-## How This Maps to SchemCraft's Crates
+## How This Maps to FerroSchem's Crates
 - [`crates/core`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/lib.rs) holds the in-memory data structures (`Point`, `Wire`, and soon `Symbol`, `Instance`, `Schematic`).
 - [`crates/format`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/format/src/lib.rs) reads and writes `.sch` and `.sym` text files into those structures.
 - [`crates/netlist`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/netlist/src/lib.rs) computes the nets from the wires/pins and prints SPICE/Verilog/VHDL.

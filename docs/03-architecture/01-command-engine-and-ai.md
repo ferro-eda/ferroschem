@@ -1,6 +1,6 @@
 # 1. The Command Engine & AI-First Design
 
-Open [`crates/engine/src/lib.rs`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/engine/src/lib.rs). Even in our tiny scaffold, you can see the core architectural idea of SchemCraft:
+Open [`crates/engine/src/lib.rs`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/engine/src/lib.rs). Even in our tiny scaffold, you can see the core architectural idea of FerroSchem:
 
 ```rust
 pub struct Session {
@@ -22,12 +22,12 @@ impl Session {
 
 In traditional desktop apps, clicking a toolbar button runs a callback right inside the GUI code that directly mutates the schematic. That makes it almost impossible for an AI agent, a CLI script, or an automated test to do what a human does.
 
-In SchemCraft, **every action is a named command** (like `"sch.wire.add"`, `"sch.instance.place"`, `"netlist.spice"`) that takes a JSON input (`serde_json::Value`) and returns a JSON output (`Result<Value, EngineError>`):
+In FerroSchem, **every action is a named command** (like `"sch.wire.add"`, `"sch.instance.place"`, `"netlist.spice"`) that takes a JSON input (`serde_json::Value`) and returns a JSON output (`Result<Value, EngineError>`):
 
 ```mermaid
 flowchart TD
     UI["Desktop / Web UI<br/>(Buttons, Shortcuts, Canvas)"] -->|JSON Command| Engine["Session::execute(id, params)"]
-    CLI["schemcraft-cli<br/>(Headless Scripts & CI)"] -->|JSON Command| Engine
+    CLI["ferroschem-cli<br/>(Headless Scripts & CI)"] -->|JSON Command| Engine
     MCP["External AI Agents<br/>(Claude Code, Antigravity via MCP)"] -->|JSON Command| Engine
     Chat["Built-in Assistant Panel<br/>(With Review-Before-Apply)"] -->|JSON Command| Engine
     Engine --> Core["Schematic Data Model + Undo Stack"]

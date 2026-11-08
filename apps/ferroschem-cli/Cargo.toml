@@ -1,5 +1,5 @@
 [package]
-name = "schemcraft-cli"
+name = "ferroschem-cli"
 description = "Headless command line: netlisting, command execution, MCP server"
 version.workspace = true
 edition.workspace = true
@@ -7,11 +7,11 @@ license.workspace = true
 rust-version.workspace = true
 
 [[bin]]
-name = "schemcraft-cli"
+name = "ferroschem-cli"
 path = "src/main.rs"
 
 [dependencies]
-schemcraft-engine.workspace = true
+ferroschem-engine.workspace = true
 serde_json.workspace = true
 
 [lints]

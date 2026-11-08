@@ -2,7 +2,7 @@
 //! `cargo xtask layers`: fail if a lower layer depends on a higher one or on UI crates.
 use std::{fs, process::ExitCode};
 
-/// (crate dir, layer). A crate may only depend on schemcraft crates of a lower layer.
+/// (crate dir, layer). A crate may only depend on ferroschem crates of a lower layer.
 const LAYERS: &[(&str, u8)] = &[
     ("core", 0),
     ("format", 1),
@@ -32,7 +32,7 @@ fn layers() -> ExitCode {
         };
         for line in text.lines() {
             let name = line.split(['=', '.']).next().unwrap_or("").trim();
-            if let Some(dep) = name.strip_prefix("schemcraft-") {
+            if let Some(dep) = name.strip_prefix("ferroschem-") {
                 let dep_layer = LAYERS.iter().find(|(d, _)| *d == dep).map(|(_, l)| *l);
                 if dep_layer.is_some_and(|l| l >= *layer) {
                     eprintln!("layer violation: {dir} (L{layer}) depends on {dep}");

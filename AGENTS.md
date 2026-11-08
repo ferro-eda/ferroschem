@@ -1,11 +1,11 @@
-# SchemCraft — instructions for agents
+# FerroSchem — instructions for agents
 
-SchemCraft is an open-source, pure-Rust schematic capture and netlisting application, compatible
+FerroSchem is an open-source, pure-Rust schematic capture and netlisting application, compatible
 with the xschem file formats, with a modern egui/wgpu UI, a web build, and an AI-first design:
 anything a person can do, an agent can do.
 
 License: **GPL-3.0-or-later**. Every source file starts with `SPDX-License-Identifier: GPL-3.0-or-later`.
-SchemCraft is an independent project, not affiliated with or endorsed by xschem or its author.
+FerroSchem is an independent project, not affiliated with or endorsed by xschem or its author.
 
 ## Start & End of Every Session (Seamless Context Continuity)
 `plan/` is our single source of truth across sessions (no separate `memory_bank/` folder).
@@ -29,7 +29,7 @@ SchemCraft is an independent project, not affiliated with or endorsed by xschem 
 
 ## Teaching-First Development (No Black Boxes)
 Developers on this project (including the lead author) may be learning Rust and schematic capture
-concepts while building SchemCraft. **Never dump large black-box implementations.**
+concepts while building FerroSchem. **Never dump large black-box implementations.**
 - **Work in Teaching Phases** for every task:
   1. **Concept & Mental Model:** Briefly explain the EDA/xschem concept we are tackling and the
      Rust pattern we will use to model it (and *why*).
@@ -40,7 +40,7 @@ concepts while building SchemCraft. **Never dump large black-box implementations
 - **`docs/` is a first-class deliverable.** Maintain `docs/` so any newcomer reading `docs/README.md`
   can learn:
   - `docs/01-eda-and-xschem/` — schematic capture, symbols, pins, wires, nets, netlisting, xschem format.
-  - `docs/02-rust-for-schemcraft/` — Rust concepts taught directly through SchemCraft's own code.
+  - `docs/02-rust-for-ferroschem/` — Rust concepts taught directly through FerroSchem's own code.
   - `docs/03-architecture/` — layering, command engine, AI safety, rendering.
 
 ## Reference material (`reference/`, gitignored, never committed)

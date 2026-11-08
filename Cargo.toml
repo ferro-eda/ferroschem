@@ -8,15 +8,15 @@ version = "0.1.0"
 edition = "2024"
 license = "GPL-3.0-or-later"
 rust-version = "1.85"
-authors = ["SchemCraft contributors"]
+authors = ["FerroSchem contributors"]
 
 [workspace.dependencies]
 # internal
-schemcraft-core = { path = "crates/core" }
-schemcraft-format = { path = "crates/format" }
-schemcraft-netlist = { path = "crates/netlist" }
-schemcraft-engine = { path = "crates/engine" }
-schemcraft-ui-egui = { path = "crates/ui-egui" }
+ferroschem-core = { path = "crates/core" }
+ferroschem-format = { path = "crates/format" }
+ferroschem-netlist = { path = "crates/netlist" }
+ferroschem-engine = { path = "crates/engine" }
+ferroschem-ui-egui = { path = "crates/ui-egui" }
 
 # foundation
 thiserror = "2"

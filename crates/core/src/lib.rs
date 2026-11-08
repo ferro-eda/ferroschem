@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-//! SchemCraft canonical domain model (layer L0).
+//! FerroSchem canonical domain model (layer L0).
 //!
 //! No UI, I/O or platform dependencies, so it compiles cleanly to `wasm32-unknown-unknown`.
 //!

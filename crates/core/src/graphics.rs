@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 use crate::geometry::{Point, Rotation};
 use crate::props::Properties;
 
-/// Semantic drawing layer role in SchemCraft.
+/// Semantic drawing layer role in FerroSchem.
 ///
 /// Using semantic roles allows UI themes (dark/light/print) and AI visibility filters
 /// to understand *what* a graphic represents, while [`LayerRole::Custom`] preserves
