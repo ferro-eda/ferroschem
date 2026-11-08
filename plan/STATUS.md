@@ -44,4 +44,5 @@
 ## Key Context & Rules to Remember
 - **No Auto-Commit:** Never run `git commit` or `git push` without explicit user approval in the current turn.
 - **Reference repos (`reference/xschem` and `reference/solidcraft`):** Gitignored locally for study/porting; record any ported logic in `ATTRIBUTION.md`.
+- **Off-Repo Assets (`memory_bank/`):** Gitignored local directory tracking off-repo admin info (domain `ferroeda.org`, private repos, registries).
 - **Checks:** `cargo fmt --check && cargo clippy --workspace --all-targets && cargo test --workspace && cargo xtask layers`.

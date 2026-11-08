@@ -8,7 +8,7 @@ License: **GPL-3.0-or-later**. Every source file starts with `SPDX-License-Ident
 FerroSchem is an independent project, not affiliated with or endorsed by xschem or its author.
 
 ## Start & End of Every Session (Seamless Context Continuity)
-`plan/` is our single source of truth across sessions (no separate `memory_bank/` folder).
+`plan/` is our single source of truth across sessions for code and architecture. A gitignored `memory_bank/` holds private off-repo administrative context (domains, accounts, private companion repos).
 1. **At the start of every session:** Read `plan/STATUS.md` (Developer Profile, Teaching Progress,
    Active Focus, Last Completed Slice, Immediate Next Slice, and Key Context), then the task in
    `plan/execution-plan.md` and the relevant `plan/architecture.md` section.
