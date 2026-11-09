@@ -5,7 +5,7 @@ Let's walk through the actual Rust code in our M0 scaffold so every keyword and 
 ---
 
 ## 1. `struct` and `#[derive(...)]` — Modeling Data
-Open [`crates/core/src/lib.rs`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/lib.rs):
+Open [`crates/core/src/lib.rs`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/lib.rs):
 
 ```rust
 #[derive(Debug, Clone, Copy, PartialEq, Default, Serialize, Deserialize)]
@@ -26,7 +26,7 @@ pub struct Point {
 ---
 
 ## 2. `Option<T>` — Replacing `null` Safely
-Look at `Wire` in [`crates/core/src/lib.rs`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/lib.rs):
+Look at `Wire` in [`crates/core/src/lib.rs`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/lib.rs):
 
 ```rust
 pub struct Wire {
@@ -44,7 +44,7 @@ Because `Option<String>` is a distinct type from `String`, the compiler forces y
 ---
 
 ## 3. `Result<T, E>` and Why We Ban `unwrap()`
-Look at the top of [`crates/core/src/lib.rs`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/lib.rs) and [`crates/format/src/lib.rs`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/format/src/lib.rs):
+Look at the top of [`crates/core/src/lib.rs`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/lib.rs) and [`crates/format/src/lib.rs`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/format/src/lib.rs):
 
 ```rust
 #![deny(
@@ -62,7 +62,7 @@ In EDA software, **a crash destroys the user's unsaved circuit design**. In Rust
 
 Beginners often write `.unwrap()` on a `Result` or `Option`, which means *"give me the value inside `Ok`/`Some`, or crash the whole program if it's `Err`/`None`"*. By adding `#![deny(clippy::unwrap_used, ...)]`, our build fails if anyone (human or AI) ever writes `.unwrap()`.
 
-Instead, we define structured errors with `thiserror` in [`crates/format/src/lib.rs`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/format/src/lib.rs):
+Instead, we define structured errors with `thiserror` in [`crates/format/src/lib.rs`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/format/src/lib.rs):
 ```rust
 #[derive(Debug, thiserror::Error)]
 pub enum FormatError {

@@ -1,6 +1,6 @@
 # 1. The Command Engine & AI-First Design
 
-Open [`crates/engine/src/lib.rs`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/engine/src/lib.rs). Even in our tiny scaffold, you can see the core architectural idea of FerroSchem:
+Open [`crates/engine/src/lib.rs`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/engine/src/lib.rs). Even in our tiny scaffold, you can see the core architectural idea of FerroSchem:
 
 ```rust
 pub struct Session {

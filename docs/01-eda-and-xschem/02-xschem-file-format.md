@@ -19,15 +19,15 @@ An xschem `.sch` or `.sym` file is a sequence of plain-text records. Each record
 
 | Xschem Tag | Meaning in Xschem | How `ferroschem-core` Models It |
 |---|---|---|
-| `v`, `G`, `K`, `V`, `S`, `F`, `E` | Version & global property blocks (VHDL, Symbol, Verilog, SPICE, Spectre, tEDAx) | `Symbol::props` / `Schematic::props` + [`XschemHeaders`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/props.rs#L39-L56) passthrough |
-| `L` | **Line** segment on an integer layer (`0..N`) | [`Line`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/graphics.rs#L37-L43) with semantic [`LayerRole`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/graphics.rs#L14-L34) |
-| `B` (layer ≠ 5) | **Box (Rectangle)** on a cosmetic layer | [`Rect`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/graphics.rs#L46-L52) with semantic [`LayerRole`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/graphics.rs#L14-L34) |
-| `B 5 ...` | **Box on Layer 5 (`PINLAYER`)** = Electrical Pin! | First-class [`Pin`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/document.rs#L48-L60) on [`Symbol::pins`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/document.rs#L127) |
-| `A` | **Arc / Circle** on a layer | [`Arc`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/graphics.rs#L55-L63) |
-| `P` | **Polygon / Polyline** on a layer | [`Polygon`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/graphics.rs#L66-L71) |
-| `T` | **Text** label | [`Text`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/graphics.rs#L74-L85) |
-| `N` | **Electrical Wire** segment | [`Wire`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/document.rs#L87-L92) on [`Schematic::wires`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/document.rs#L140) |
-| `C` | **Component Instance** (places a `.sym`) | [`Instance`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/document.rs#L103-L114) on [`Schematic::instances`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/document.rs#L142) |
+| `v`, `G`, `K`, `V`, `S`, `F`, `E` | Version & global property blocks (VHDL, Symbol, Verilog, SPICE, Spectre, tEDAx) | `Symbol::props` / `Schematic::props` + [`XschemHeaders`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/props.rs#L39-L56) passthrough |
+| `L` | **Line** segment on an integer layer (`0..N`) | [`Line`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/graphics.rs#L37-L43) with semantic [`LayerRole`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/graphics.rs#L14-L34) |
+| `B` (layer ≠ 5) | **Box (Rectangle)** on a cosmetic layer | [`Rect`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/graphics.rs#L46-L52) with semantic [`LayerRole`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/graphics.rs#L14-L34) |
+| `B 5 ...` | **Box on Layer 5 (`PINLAYER`)** = Electrical Pin! | First-class [`Pin`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/document.rs#L48-L60) on [`Symbol::pins`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/document.rs#L127) |
+| `A` | **Arc / Circle** on a layer | [`Arc`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/graphics.rs#L55-L63) |
+| `P` | **Polygon / Polyline** on a layer | [`Polygon`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/graphics.rs#L66-L71) |
+| `T` | **Text** label | [`Text`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/graphics.rs#L74-L85) |
+| `N` | **Electrical Wire** segment | [`Wire`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/document.rs#L87-L92) on [`Schematic::wires`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/document.rs#L140) |
+| `C` | **Component Instance** (places a `.sym`) | [`Instance`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/document.rs#L103-L114) on [`Schematic::instances`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/document.rs#L142) |
 | `[`...`]` | Optional inline embedded symbol definition | `Instance::embedded_symbol: Option<Symbol>` |
 
 ---
@@ -62,11 +62,11 @@ T {@value} 15 -6.25 0 0 0.2 0.2 {}
 
 Look closely at how xschem encodes things vs. how `ferroschem-core` cleans them up:
 
-1. **Pins (`B 5 ...` → [`Pin`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/document.rs#L48-L60)):**
+1. **Pins (`B 5 ...` → [`Pin`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/document.rs#L48-L60)):**
    - In xschem, there is no `PIN` tag—a pin is a `B` (Box) on magic layer `5` (`B 5 -2.5 -32.5 2.5 -27.5 {name=P dir=inout ...}`).
-   - When our `format::xschem` parser reads a `.sym`, it converts every `B 5` record into a first-class [`Pin`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/document.rs#L48-L60) with `name: "P"`, `dir: PinDirection::InOut`, `pos: Point::new(0.0, -30.0)` (the center of the box), and `size: Point::new(5.0, 5.0)`.
-   - When saving back to `.sym`, [`Pin::bounds()`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/document.rs#L74-L82) reconstructs the exact `-2.5 -32.5 2.5 -27.5` box coordinates!
-2. **Layers (`4`, `13`, `15`, `17` → [`LayerRole`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/graphics.rs#L14-L34)):**
+   - When our `format::xschem` parser reads a `.sym`, it converts every `B 5` record into a first-class [`Pin`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/document.rs#L48-L60) with `name: "P"`, `dir: PinDirection::InOut`, `pos: Point::new(0.0, -30.0)` (the center of the box), and `size: Point::new(5.0, 5.0)`.
+   - When saving back to `.sym`, [`Pin::bounds()`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/document.rs#L74-L82) reconstructs the exact `-2.5 -32.5 2.5 -27.5` box coordinates!
+2. **Layers (`4`, `13`, `15`, `17` → [`LayerRole`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/graphics.rs#L14-L34)):**
    - Xschem uses integer color indices (`4` = symbol body, `13` = pin numbers, `15` = net names, `17` = simulation annotations).
    - `ferroschem-core` maps these to semantic variants (`LayerRole::SymbolBody`, `LayerRole::PinAnnotation`, etc.), while any custom layer number maps to `LayerRole::Custom(n)` so nothing is ever lost.
 
@@ -80,8 +80,8 @@ C {res.sym} 440 -190 0 0 {name=Re value=2.158 footprint=1206 device=resistor m=1
 C {res.sym} 190 -380 3 1 {name=Rbx value="3.723" footprint=1206 device=resistor m=1}
 ```
 
-- **Wires (`N`):** `N <x1> <y1> <x2> <y2> {<props>}` → [`Wire`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/document.rs#L87-L92).
-- **Component Instances (`C`):** `C {<symbol>} <x> <y> <rot> <flip> {<props>}` → [`Instance`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/document.rs#L103-L114).
+- **Wires (`N`):** `N <x1> <y1> <x2> <y2> {<props>}` → [`Wire`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/document.rs#L87-L92).
+- **Component Instances (`C`):** `C {<symbol>} <x> <y> <rot> <flip> {<props>}` → [`Instance`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/document.rs#L103-L114).
 
 ---
 

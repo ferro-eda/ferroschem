@@ -60,6 +60,6 @@ Once your schematic is drawn, the **netlister** walks the schematic:
 ---
 
 ## How This Maps to FerroSchem's Crates
-- [`crates/core`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/core/src/lib.rs) holds the in-memory data structures (`Point`, `Wire`, and soon `Symbol`, `Instance`, `Schematic`).
-- [`crates/format`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/format/src/lib.rs) reads and writes `.sch` and `.sym` text files into those structures.
-- [`crates/netlist`](file:///Users/loki/Workspace/GitHub_Repos/xschem_rust/crates/netlist/src/lib.rs) computes the nets from the wires/pins and prints SPICE/Verilog/VHDL.
+- [`crates/core`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/lib.rs) holds the in-memory data structures (`Point`, `Wire`, and soon `Symbol`, `Instance`, `Schematic`).
+- [`crates/format`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/format/src/lib.rs) reads and writes `.sch` and `.sym` text files into those structures.
+- [`crates/netlist`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/netlist/src/lib.rs) computes the nets from the wires/pins and prints SPICE/Verilog/VHDL.
