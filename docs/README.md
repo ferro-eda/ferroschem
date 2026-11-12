@@ -18,7 +18,8 @@ Learn how schematic capture tools actually work under the hood.
 Learn Rust step-by-step through the exact patterns used in this repo.
 1. [Workspaces, Crates, and Layering](./02-rust-for-ferroschem/01-workspace-and-crates.md) — How a multi-crate Rust project is organized and why we enforce strict layers (`L0` to `L3`).
 2. [Structs, Enums, and Error Handling](./02-rust-for-ferroschem/02-structs-enums-and-errors.md) — How our scaffold models data (`struct`, `enum`, `Option`, `Result`) and why we ban `unwrap()`.
-3. [Enums, `BTreeMap`, and Iterators in `ferroschem-core`](./02-rust-for-ferroschem/03-enums-and-collections.md) — How we model rotations, deterministic property maps, and zero-allocation pin iterators.
+3. [Enums, Struct Composition, and Insertion-Ordered `Properties`](./02-rust-for-ferroschem/03-enums-and-collections.md) — How we model semantic layers, pins, and order-preserving property maps in `ferroschem-core`.
+4. [String Slices, `char_indices()`, and State-Machine Lexing](./02-rust-for-ferroschem/04-strings-and-lexing.md) — How `ferroschem-format` lexes `{...}` strings and `key=value` properties without copying or panicking.
 
 ### Part 3: FerroSchem Architecture (`03-architecture/`)
 Learn how FerroSchem's engine, UI, and AI assistant fit together.

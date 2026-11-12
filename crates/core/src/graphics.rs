@@ -10,26 +10,25 @@ use crate::props::Properties;
 ///
 /// Using semantic roles allows UI themes (dark/light/print) and AI visibility filters
 /// to understand *what* a graphic represents, while [`LayerRole::Custom`] preserves
-/// arbitrary numbered layers from formats like xschem without loss.
+/// arbitrary numbered layers from external CAD formats without loss.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
 pub enum LayerRole {
-    /// Electrical wire layer (xschem layer 1).
+    /// Electrical wire layer.
     Wire,
-    /// General text and notes layer (xschem layer 3).
+    /// General text and notes layer.
     Text,
-    /// Component symbol body graphics (xschem layer 4).
+    /// Component symbol body graphics.
     #[default]
     SymbolBody,
-    /// Electrical pin terminal markers (xschem layer 5).
+    /// Electrical pin terminal markers.
     Pin,
-    /// Pin number annotations (xschem layer 13).
+    /// Pin number annotations.
     PinAnnotation,
-    /// Net name annotations on pins (xschem layer 15).
+    /// Net name annotations on pins.
     NetAnnotation,
-    /// Simulation back-annotation text (xschem layer 17).
+    /// Simulation back-annotation text.
     SimAnnotation,
-    /// Any other numbered CAD layer (e.g. xschem layers 0, 2, 6, 7, 8...),
-    /// preserved for lossless round-tripping.
+    /// Any other numbered CAD layer preserved for lossless round-tripping.
     Custom(u32),
 }
 

@@ -1,8 +1,8 @@
-# 3. Algebraic Data Types (`enum`), Composition, and `BTreeMap` in `ferroschem-core`
+# 3. Algebraic Data Types (`enum`), Composition, and Insertion-Ordered `Properties` in `ferroschem-core`
 
-In **M1 — Teaching Phase 1** (and [ADR 0002](../../plan/adr/0002-canonical-core-and-format-codecs.md), [ADR 0003](../../plan/adr/0003-rename-to-ferroschem.md)), we designed FerroSchem's canonical domain model across four focused modules in [`crates/core/src/`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/lib.rs):
+In **M1 — Teaching Phase 1** (and [ADR 0002](../../plan/adr/0002-canonical-core-and-format-codecs.md), [ADR 0003](../../plan/adr/0003-rename-to-ferroschem.md)), we designed FerroSchem's 100% format-agnostic canonical domain model across four focused modules in [`crates/core/src/`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/lib.rs):
 - [`geometry.rs`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/geometry.rs) (`Point`, `Rotation`)
-- [`props.rs`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/props.rs) (`Properties`, `XschemHeaders`)
+- [`props.rs`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/props.rs) (`Properties`, `Property`)
 - [`graphics.rs`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/graphics.rs) (`LayerRole`, `Graphics`, `Line`, `Rect`, `Arc`, `Polygon`, `Text`)
 - [`document.rs`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/document.rs) (`Pin`, `PinDirection`, `Wire`, `Instance`, `Symbol`, `Schematic`, `Document`)
 
@@ -86,23 +86,25 @@ And both `Symbol` and `Schematic` embed `pub graphics: Graphics`!
 
 ---
 
-## 3. `BTreeMap` vs. `HashMap` — Deterministic Key Order
+## 3. Insertion-Ordered `Vec<Property>` vs. `HashMap` / `BTreeMap`
 
-Every object has a [`Properties`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/props.rs#L13-L16) struct:
+Every object has a [`Properties`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/props.rs#L19-L21) struct backed by a `Vec<Property>`:
 
 ```rust
-use std::collections::BTreeMap;
+pub struct Property {
+    pub key: String,
+    pub value: String,
+}
 
 pub struct Properties {
-    pub map: BTreeMap<String, String>,
-    pub raw: Option<String>,
+    entries: Vec<Property>,
 }
 ```
 
-Why did we choose `std::collections::BTreeMap` instead of `std::collections::HashMap`?
-- **`HashMap`** uses a random per-process seed, so iterating over keys produces a **different random order every time you run the program**.
-- In an EDA tool, non-deterministic output causes noisy `git diff`s when saving files and flaky netlist tests.
-- **`BTreeMap`** keeps keys sorted alphabetically at all times, making file writers, netlists, and JSON outputs **100% deterministic**.
+Why did we choose an insertion-ordered `Vec<Property>` instead of `HashMap` or `BTreeMap`?
+1. **`HashMap`** uses a random per-process seed, so iterating over keys produces a **different random order every time you run the program**.
+2. **`BTreeMap`** sorts keys alphabetically—which would scramble a symbol's `template="name=M1 W=10u L=0.18u nf=1"` into `"L=0.18u W=10u name=M1 nf=1"`, breaking SPICE `.subckt` parameter ordering (`M3`) and creating noisy diffs when saving existing `.sym` or `.sch` files!
+3. **Insertion-ordered `Vec<Property>`** preserves the exact order in which keys were parsed or added, and [`Properties::set`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/props.rs#L42-L50) updates existing keys **in place** without moving them—giving us 100% deterministic, format-agnostic round-tripping across all codecs (`.sch`, `.fsch`, KiCad, JSON) with zero external dependencies!
 
 ---
 

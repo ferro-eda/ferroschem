@@ -26,7 +26,7 @@ pub use document::{
 };
 pub use geometry::{Point, Rotation};
 pub use graphics::{Arc, Graphics, LayerRole, Line, Polygon, Rect, Text};
-pub use props::{Properties, XschemHeaders};
+pub use props::{Properties, Property};
 ```
 1. **`pub mod geometry;`** tells the compiler: *"Look for [`crates/core/src/geometry.rs`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/geometry.rs) (or `geometry/mod.rs`), compile it as a submodule, and make it public."*
 2. **Inside submodules, `crate::` refers to the crate root:** For example, [`graphics.rs`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/graphics.rs) imports `Point` from its sibling module by writing `use crate::geometry::{Point, Rotation};`.

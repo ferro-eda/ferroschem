@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::geometry::{Point, Rotation};
 use crate::graphics::Graphics;
-use crate::props::{Properties, XschemHeaders};
+use crate::props::Properties;
 
 /// Electrical direction of a [`Pin`] (`in`, `out`, `inout`).
 #[derive(Debug, Clone, PartialEq, Eq, Default, Serialize, Deserialize)]
@@ -15,7 +15,7 @@ pub enum PinDirection {
     Out,
     #[default]
     InOut,
-    /// Preserves any non-standard `dir=` string from imported files.
+    /// Preserves any non-standard direction string from imported files.
     Custom(String),
 }
 
@@ -114,7 +114,7 @@ pub struct Instance {
     pub rot: Rotation,
     pub flip: bool,
     pub props: Properties,
-    /// Optional inline symbol definition (e.g. from xschem `[ ... ]` blocks).
+    /// Optional inline symbol definition embedded directly inside the instance.
     pub embedded_symbol: Option<Symbol>,
 }
 
@@ -126,7 +126,7 @@ impl Instance {
     }
 }
 
-/// A reusable component symbol blueprint (`.scsym` or `.sym`).
+/// A reusable component symbol blueprint (`.fsym`, `.sym`, etc.).
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct Symbol {
     /// Electrical connection pins exposed by this symbol.
@@ -135,11 +135,13 @@ pub struct Symbol {
     pub graphics: Graphics,
     /// Symbol-level properties (`type`, `format`, `template`, etc.).
     pub props: Properties,
-    /// Optional xschem header passthrough for lossless `.sym` round-tripping.
-    pub xschem_headers: Option<XschemHeaders>,
+    /// Optional document-level header comment or license text.
+    pub comment: String,
+    /// Target simulator / HDL code blocks keyed by backend name (e.g. `"spice"`, `"verilog"`, `"vhdl"`).
+    pub netlist_blocks: Properties,
 }
 
-/// A circuit schematic design (`.scsch` or `.sch`).
+/// A circuit schematic design (`.fsch`, `.sch`, etc.).
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct Schematic {
     /// Electrical wires connecting pins and net labels.
@@ -150,8 +152,10 @@ pub struct Schematic {
     pub graphics: Graphics,
     /// Schematic-level properties.
     pub props: Properties,
-    /// Optional xschem header passthrough for lossless `.sch` round-tripping.
-    pub xschem_headers: Option<XschemHeaders>,
+    /// Optional document-level header comment or license text.
+    pub comment: String,
+    /// Target simulator / HDL code blocks keyed by backend name (e.g. `"spice"`, `"verilog"`, `"vhdl"`).
+    pub netlist_blocks: Properties,
 }
 
 /// A top-level FerroSchem document: either a [`Schematic`] or a [`Symbol`].

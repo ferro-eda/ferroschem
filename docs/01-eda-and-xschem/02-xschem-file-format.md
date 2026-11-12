@@ -19,15 +19,17 @@ An xschem `.sch` or `.sym` file is a sequence of plain-text records. Each record
 
 | Xschem Tag | Meaning in Xschem | How `ferroschem-core` Models It |
 |---|---|---|
-| `v`, `G`, `K`, `V`, `S`, `F`, `E` | Version & global property blocks (VHDL, Symbol, Verilog, SPICE, Spectre, tEDAx) | `Symbol::props` / `Schematic::props` + [`XschemHeaders`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/props.rs#L39-L56) passthrough |
-| `L` | **Line** segment on an integer layer (`0..N`) | [`Line`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/graphics.rs#L37-L43) with semantic [`LayerRole`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/graphics.rs#L14-L34) |
-| `B` (layer ≠ 5) | **Box (Rectangle)** on a cosmetic layer | [`Rect`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/graphics.rs#L46-L52) with semantic [`LayerRole`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/graphics.rs#L14-L34) |
-| `B 5 ...` | **Box on Layer 5 (`PINLAYER`)** = Electrical Pin! | First-class [`Pin`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/document.rs#L48-L60) on [`Symbol::pins`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/document.rs#L127) |
-| `A` | **Arc / Circle** on a layer | [`Arc`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/graphics.rs#L55-L63) |
-| `P` | **Polygon / Polyline** on a layer | [`Polygon`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/graphics.rs#L66-L71) |
-| `T` | **Text** label | [`Text`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/graphics.rs#L74-L85) |
-| `N` | **Electrical Wire** segment | [`Wire`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/document.rs#L87-L92) on [`Schematic::wires`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/document.rs#L140) |
-| `C` | **Component Instance** (places a `.sym`) | [`Instance`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/document.rs#L103-L114) on [`Schematic::instances`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/document.rs#L142) |
+| `v` | File version & header comment / license block | `Symbol::comment` / `Schematic::comment` (`String`) |
+| `K` | Global symbol / schematic `key=value` attributes (`type`, `format`, `template`) | `Symbol::props` / `Schematic::props` ([`Properties`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/props.rs#L19-L21)) |
+| `G`, `V`, `S`, `F`, `E` | Top-level HDL / simulator blocks (VHDL, Verilog, SPICE, Spectre, tEDAx) | `Symbol::netlist_blocks` / `Schematic::netlist_blocks` ([`Properties`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/props.rs#L19-L21)) |
+| `L` | **Line** segment on an integer layer (`0..N`) | [`Line`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/graphics.rs#L36-L42) with semantic [`LayerRole`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/graphics.rs#L14-L32) |
+| `B` (layer ≠ 5) | **Box (Rectangle)** on a cosmetic layer | [`Rect`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/graphics.rs#L45-L51) with semantic [`LayerRole`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/graphics.rs#L14-L32) |
+| `B 5 ...` | **Box on Layer 5 (`PINLAYER`)** = Electrical Pin! | First-class [`Pin`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/document.rs#L52-L64) on [`Symbol::pins`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/document.rs#L133) |
+| `A` | **Arc / Circle** on a layer | [`Arc`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/graphics.rs#L54-L62) |
+| `P` | **Polygon / Polyline** on a layer | [`Polygon`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/graphics.rs#L65-L70) |
+| `T` | **Text** label | [`Text`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/graphics.rs#L73-L84) |
+| `N` | **Electrical Wire** segment | [`Wire`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/document.rs#L91-L96) on [`Schematic::wires`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/document.rs#L148) |
+| `C` | **Component Instance** (places a `.sym`) | [`Instance`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/document.rs#L107-L118) on [`Schematic::instances`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/document.rs#L150) |
 | `[`...`]` | Optional inline embedded symbol definition | `Instance::embedded_symbol: Option<Symbol>` |
 
 ---

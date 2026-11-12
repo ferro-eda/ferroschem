@@ -18,8 +18,9 @@
   - `02-xschem-file-format.md`: Canonical Domain Model vs. Pluggable Codecs (ADR 0002), how xschem's ASCII record format works (`v`, `G`, `K`, `V`, `S`, `F`, `E`, `L`, `B`, `A`, `P`, `T`, `N`, `C`, `[...]`), how `B 5 ...` boxes map to first-class `core::Pin`s, and a preview of FerroSchem's native S-expression format (`.fsch` / `.fsym`).
 - **Rust (`docs/02-rust-for-ferroschem/`):**
   - `01-workspace-and-crates.md`: Cargo workspaces, library vs. binary crates, multi-file modules (`pub mod`, `crate::`, and `pub use` Facade re-exports), and strict `L0`–`L3` layering.
-  - `02-structs-enums-and-errors.md`: `struct`, `#[derive]`, `Option<T>`, `Result<T, E>`, `?`, and banning `unwrap()`.
-  - `03-enums-and-collections.md`: Algebraic Data Types (`enum` variants carrying data: `LayerRole::Custom(u32)`, `PinDirection::Custom(String)`, `Document`), struct composition (`Graphics`), `BTreeMap` vs. `HashMap`, and `impl Into<String>`.
+  - `02-structs-enums-and-errors.md`: `struct`, `#[derive]`, `Option<T>`, `#[must_use]`, `Result<T, E>`, `?`, and banning `unwrap()`.
+  - `03-enums-and-collections.md`: Algebraic Data Types (`enum` variants carrying data: `LayerRole::Custom(u32)`, `PinDirection::Custom(String)`, `Document`), struct composition (`Graphics`), insertion-ordered `Properties` (`Vec<Property>`) vs. `HashMap`/`BTreeMap`, and `impl Into<String>`.
+  - `04-strings-and-lexing.md`: Returning `(String, &str)` for zero-copy cursor slicing, UTF-8 safety with `.char_indices()` and `.len_utf8()`, `let Some(...) = ... else`, `matches!`, and `std::mem::take` in state machines.
 - **Architecture (`docs/03-architecture/01-command-engine-and-ai.md`):** Command-first engine (`Session::execute`), borrowing (`&mut self`, `&str`, `&Value`).
 
 ## Active Focus
@@ -29,16 +30,15 @@
   - ADR 0003 — Project renamed to **FerroSchem** under GitHub org `ferro-eda` (`https://github.com/ferro-eda/ferroschem`).
 
 ## Last Completed Slice
-- **M1 — Teaching Phase 1 + ADR 0002 & ADR 0003 (Canonical Core Model & FerroSchem Rename):**
-  - Recorded `plan/adr/0002-canonical-core-and-format-codecs.md` separating `L0 ferroschem-core` (format-agnostic canonical model) from `L1 ferroschem-format` (pluggable codecs: `format::xschem` and `format::native` S-expressions).
-  - Recorded `plan/adr/0003-rename-to-ferroschem.md` establishing FerroSchem under `ferro-eda`.
-  - Split `crates/core/src/` into four small, focused modules (`geometry.rs`, `props.rs`, `graphics.rs`, `document.rs`) re-exported from a 32-line `crates/core/src/lib.rs`.
-  - Updated `docs/` to teach Rust's module system (`pub mod`, `crate::`, `pub use` re-exports) alongside Algebraic Data Types and composition.
+- **M1 — Teaching Phase 2 + Pure Format-Agnostic `core` Refactor (`crates/core`, `crates/format/src/xschem/`):**
+  - Made `L0 ferroschem-core` 100% format-agnostic: replaced `BTreeMap` + `raw: Option<String>` with insertion-ordered `Properties` (`Vec<Property>` with in-place `set`), replaced `XschemHeaders` with format-agnostic `comment: String` and `netlist_blocks: Properties` on `Symbol`/`Schematic`, and moved `layer_from_xschem` / `layer_to_xschem` into [`crates/format/src/xschem/mod.rs`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/format/src/xschem/mod.rs).
+  - Created [`crates/format/src/xschem/tokens.rs`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/format/src/xschem/tokens.rs) and [`crates/format/src/xschem/mod.rs`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/format/src/xschem/mod.rs), implementing `read_braced_string`, `write_braced_string`, `parse_properties`, and `format_properties` with unit tests.
+  - Updated `ADR 0002`, `docs/`, and `ATTRIBUTION.md`.
 
 ## Immediate Next Slice
-- **M1 — Teaching Phase 2 (Xschem `{...}` Braced String & `key=value` Property Tokenizer in `crates/format/src/xschem/`):**
-  1. Organize `crates/format` into focused submodules (`crates/format/src/xschem/tokens.rs` & `mod.rs`).
-  2. Teach character-by-character lexing in Rust (`std::str::Chars` / `Peekable`) and implement the `{...}` braced-string reader/writer and `key=value` `Properties` parser/writer (porting the rules of `load_ascii_string`, `save_ascii_string`, and `get_tok_value` from `reference/xschem/src/save.c` & `token.c`), with unit tests including hostile inputs.
+- **M1 — Teaching Phase 3 (Xschem `.sym` & `.sch` Record Parser & Writer in `crates/format/src/xschem/`):**
+  1. Implement the xschem record parser and writer (`crates/format/src/xschem/parser.rs` and `writer.rs`) translating `v`, `G`, `K`, `V`, `S`, `F`, `E`, `L`, `B` (including `B 5` ↔ first-class `core::Pin`), `A`, `P`, `T`, `N`, `C`, and `[...]` embedded symbols into `core::Symbol`, `core::Schematic`, and `core::Document`.
+  2. Round-trip test against real `xschem_library` symbol and schematic files (e.g. `res.sym`, `capa.sym`, and sample `.sch` files).
   3. Update `docs/` and `ATTRIBUTION.md`.
 
 ## Key Context & Rules to Remember

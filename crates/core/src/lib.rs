@@ -1,11 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //! FerroSchem canonical domain model (layer L0).
 //!
-//! No UI, I/O or platform dependencies, so it compiles cleanly to `wasm32-unknown-unknown`.
+//! 100% format-agnostic, with no UI, I/O, or platform dependencies, so it compiles
+//! cleanly to `wasm32-unknown-unknown`.
 //!
 //! ### Module Layout
 //! - [`geometry`] — 2D coordinate primitives ([`Point`], [`Rotation`]).
-//! - [`props`] — Deterministic key-value [`Properties`] and [`XschemHeaders`] passthrough.
+//! - [`props`] — Deterministic, insertion-ordered key-value [`Properties`] and [`Property`].
 //! - [`graphics`] — Semantic [`LayerRole`] and 2D drawing primitives ([`Graphics`], [`Line`],
 //!   [`Rect`], [`Arc`], [`Polygon`], [`Text`]).
 //! - [`document`] — Electrical domain objects ([`Pin`], [`PinDirection`], [`Wire`], [`Instance`])
@@ -29,4 +30,4 @@ pub use document::{
 };
 pub use geometry::{Point, Rotation};
 pub use graphics::{Arc, Graphics, LayerRole, Line, Polygon, Rect, Text};
-pub use props::{Properties, XschemHeaders};
+pub use props::{Properties, Property};

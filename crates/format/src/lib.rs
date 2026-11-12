@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-//! `.sch` / `.sym` parser and writer (layer L1). Operates on `&str`, never the
-//! filesystem, so it compiles to wasm. Input is hostile: every failure is an error.
+//! Pluggable schematic and symbol format codecs (`L1 format`).
+//!
+//! Operates on `&str`, never the filesystem, so it compiles cleanly to
+//! `wasm32-unknown-unknown`. Input is treated as hostile: every failure is a
+//! typed [`FormatError`], never a panic.
 #![deny(
     clippy::unwrap_used,
     clippy::expect_used,
@@ -10,10 +13,36 @@
     clippy::unreachable
 )]
 
+pub mod xschem;
+
 use ferroschem_core::Schematic;
 
-#[derive(Debug, thiserror::Error)]
+/// Safety limits for format parsers, configurable by user settings or `Session`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct ParseLimits {
+    /// Maximum size in bytes for a single string or property block (default: 16 MiB).
+    pub max_string_bytes: usize,
+}
+
+impl ParseLimits {
+    pub const DEFAULT: Self = Self {
+        max_string_bytes: 16 * 1024 * 1024,
+    };
+}
+
+impl Default for ParseLimits {
+    fn default() -> Self {
+        Self::DEFAULT
+    }
+}
+
+/// Errors returned when parsing or serializing schematic/symbol formats.
+#[derive(Debug, Clone, PartialEq, Eq, thiserror::Error)]
 pub enum FormatError {
+    #[error("syntax error: {0}")]
+    Syntax(String),
+    #[error("input size ({size} bytes) exceeds maximum allowed ({max} bytes)")]
+    InputTooLarge { size: usize, max: usize },
     #[error("not supported yet: {0}")]
     Unsupported(String),
 }

@@ -26,20 +26,45 @@ pub struct Point {
 ---
 
 ## 2. `Option<T>` — Replacing `null` Safely
-Look at `Wire` in [`crates/core/src/lib.rs`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/lib.rs):
+Look at [`Properties::get`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/props.rs#L31-L37) and [`Wire::label`](file:///Users/loki/Workspace/GitHub_Repos/ferroeda/ferroschem/crates/core/src/document.rs#L99-L105):
 
 ```rust
-pub struct Wire {
-    pub a: Point,
-    pub b: Point,
-    pub label: Option<String>,
+impl Properties {
+    /// Look up a property value by key (e.g. `props.get("name")` or `props.get("value")`).
+    #[must_use]
+    pub fn get(&self, key: &str) -> Option<&str> {
+        self.entries
+            .iter()
+            .find(|entry| entry.key == key)
+            .map(|entry| entry.value.as_str())
+    }
+}
+
+impl Wire {
+    /// Net label attached to this wire (`lab=`), if any.
+    #[must_use]
+    pub fn label(&self) -> Option<&str> {
+        self.props.get("lab")
+    }
 }
 ```
 Rust does **not** have `null` or `nil`. If a value might be absent (for example, an unnamed wire has no `lab=` net label), we wrap its type in `Option<T>`, which is a built-in Rust `enum` with two variants:
-- `Some(String)` — the wire has a label, e.g. `Some("VDD".to_string())`.
-- `None` — the wire has no label.
+- `Some(T)` — a value is present, e.g. `Some("VDD")`.
+- `None` — no value is present.
 
-Because `Option<String>` is a distinct type from `String`, the compiler forces you to handle the `None` case—eliminating null-pointer crashes at compile time.
+Because `Option<T>` is a distinct type from `T`, the compiler forces you to handle the `None` case—eliminating null-pointer crashes at compile time.
+
+The `#[must_use]` attribute above `label` asks Rust to warn if a caller throws away the returned `Option`:
+
+```rust
+wire.label(); // warning: the returned Option is unused
+
+if let Some(label) = wire.label() {
+    println!("Wire label: {label}");
+}
+```
+
+It applies to the method's **return value**, not to the `Wire` object. It does not mean every wire must call `label()`. The warning helps catch cases where the caller may have meant to inspect or use the label but forgot. Warnings can be configured as errors by a project, but `#[must_use]` itself is not a requirement to call the method.
 
 ---
 
