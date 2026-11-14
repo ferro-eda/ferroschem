@@ -1,10 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //! Xschem `.sch` and `.sym` ASCII format codec.
 
+pub mod parser;
 pub mod tokens;
 
 use ferroschem_core::LayerRole;
 
+pub use parser::{parse_document, parse_schematic, parse_symbol};
 pub use tokens::{format_properties, parse_properties, read_braced_string, write_braced_string};
 
 /// Convert an xschem integer CAD layer (`0..N`) into a semantic [`LayerRole`].

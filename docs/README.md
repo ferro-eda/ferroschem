@@ -20,6 +20,7 @@ Learn Rust step-by-step through the exact patterns used in this repo.
 2. [Structs, Enums, and Error Handling](./02-rust-for-ferroschem/02-structs-enums-and-errors.md) — How our scaffold models data (`struct`, `enum`, `Option`, `Result`) and why we ban `unwrap()`.
 3. [Enums, Struct Composition, and Insertion-Ordered `Properties`](./02-rust-for-ferroschem/03-enums-and-collections.md) — How we model semantic layers, pins, and order-preserving property maps in `ferroschem-core`.
 4. [String Slices, `char_indices()`, and State-Machine Lexing](./02-rust-for-ferroschem/04-strings-and-lexing.md) — How `ferroschem-format` lexes `{...}` strings and `key=value` properties without copying or panicking.
+5. [Lifetimes (`'a`), Turbofish Parsing (`.parse::<T>()`), and Recursive Descent](./02-rust-for-ferroschem/05-lifetimes-and-recursive-descent.md) — How `parser.rs` parses xschem `.sym` and `.sch` records into canonical `ferroschem-core` types.
 
 ### Part 3: FerroSchem Architecture (`03-architecture/`)
 Learn how FerroSchem's engine, UI, and AI assistant fit together.
